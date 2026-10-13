@@ -1,0 +1,111 @@
+// SoundWave - Data Store
+const SW_DATA = {
+  songs: [
+    {id:1,title:"Blinding Lights",artist:"The Weeknd",album:"After Hours",duration:"3:20",genre:"pop",cover:"https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/a6/6e/bf/a66ebf79-5008-8948-b352-a790fc87446b/19UM1IM04638.rgb.jpg/300x300bb.jpg",audioSrc:"fHI8X4OXluQ"},
+    {id:2,title:"Bohemian Rhapsody",artist:"Queen",album:"A Night at the Opera",duration:"5:55",genre:"rock",cover:"https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/4d/08/2a/4d082a9e-7898-1aa1-a02f-339810058d9e/14DMGIM05632.rgb.jpg/300x300bb.jpg",audioSrc:"xG16sdjLtc0"},
+    {id:3,title:"Shape of You",artist:"Ed Sheeran",album:"÷",duration:"3:53",genre:"pop",cover:"https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/15/e6/e8/15e6e8a4-4190-6a8b-86c3-ab4a51b88288/190295851286.jpg/300x300bb.jpg",audioSrc:"_dK2tDK9grQ"},
+    {id:4,title:"Levitating",artist:"Dua Lipa",album:"Future Nostalgia",duration:"3:23",genre:"pop",cover:"https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/6c/11/d6/6c11d681-aa3a-d59e-4c2e-f77e181026ab/190295092665.jpg/300x300bb.jpg",audioSrc:"WHuBW3qKm9g"},
+    {id:5,title:"Starboy",artist:"The Weeknd",album:"Starboy",duration:"3:50",genre:"pop",cover:"https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/b5/92/bb/b592bb72-52e3-e756-9b26-9f56d08f47ab/16UMGIM67864.rgb.jpg/300x300bb.jpg",audioSrc:"Rif-RTvmmss"},
+    {id:6,title:"Bad Guy",artist:"Billie Eilish",album:"WHEN WE ALL FALL ASLEEP",duration:"3:14",genre:"pop",cover:"https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/1a/37/d1/1a37d1b1-8508-54f2-f541-bf4e437dda76/19UMGIM05028.rgb.jpg/300x300bb.jpg",audioSrc:"DyDfgMOUjCI"},
+    {id:7,title:"Lose Yourself",artist:"Eminem",album:"8 Mile",duration:"5:26",genre:"hip-hop",cover:"https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/08/23/fc/0823fcd9-cb44-695b-32bf-b3bf51d9f800/00606949351229.rgb.jpg/300x300bb.jpg",audioSrc:"Wj7lL6eDOqc"},
+    {id:8,title:"Uptown Funk",artist:"Bruno Mars",album:"Uptown Special",duration:"4:30",genre:"funk",cover:"https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/7e/30/c5/7e30c572-aa47-5f7b-c6fd-42d50cd2c56d/886444959797.jpg/300x300bb.jpg",audioSrc:"7Ya2U8XN_Zw"},
+    {id:9,title:"Dance Monkey",artist:"Tones and I",album:"The Kids Are Coming",duration:"3:29",genre:"pop",cover:"https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/87/ed/42/87ed4279-d8d7-840f-90b5-2bffe34699ef/075679839237.jpg/300x300bb.jpg",audioSrc:"q0hyYWKXF0Q"},
+    {id:10,title:"Someone Like You",artist:"Adele",album:"21",duration:"4:45",genre:"ballad",cover:"https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/eb/ca/25/ebca2596-cd1e-b295-91a3-771c868d0a79/191404113868.png/300x300bb.jpg",audioSrc:"22c3_LoIfZQ"},
+    {id:11,title:"Despacito",artist:"Luis Fonsi",album:"Vida",duration:"3:47",genre:"latin",cover:"https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/e2/ef/f0/e2eff0bc-c51d-7de5-9280-6891ddcee71b/18UMGIM85289.rgb.jpg/300x300bb.jpg",audioSrc:"2bHBUs-k3ac"},
+    {id:12,title:"Rolling in the Deep",artist:"Adele",album:"21",duration:"3:48",genre:"pop",cover:"https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/eb/ca/25/ebca2596-cd1e-b295-91a3-771c868d0a79/191404113868.png/300x300bb.jpg",audioSrc:"bDtjO-R0QSo"},
+    {id:13,title:"Radioactive",artist:"Imagine Dragons",album:"Night Visions",duration:"3:06",genre:"rock",cover:"https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/1f/fa/09/1ffa092f-f52f-4a66-7d10-4cc5982dc747/12UMGIM46901.rgb.jpg/300x300bb.jpg",audioSrc:"w3viBe2Q0P8"},
+    {id:14,title:"Havana",artist:"Camila Cabello",album:"Camila",duration:"3:37",genre:"latin",cover:"https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/85/28/70/85287029-19b9-cbe3-d1ab-300781875bf4/886446870298.jpg/300x300bb.jpg",audioSrc:"HCjNJDNzw8Y"},
+    {id:15,title:"Thunder",artist:"Imagine Dragons",album:"Evolve",duration:"3:07",genre:"rock",cover:"https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/11/7a/b8/117ab805-6811-8929-18b9-0fad7baf0c25/17UMGIM98210.rgb.jpg/300x300bb.jpg",audioSrc:"4AqjqOqNrjw"},
+    {id:16,title:"Counting Stars",artist:"OneRepublic",album:"Native",duration:"4:17",genre:"pop",cover:"https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/25/46/a7/2546a71a-b2bb-b4c9-4c52-a4daa3ae23ca/13UMGIM15076.rgb.jpg/300x300bb.jpg",audioSrc:"4WgWGcED0JQ"},
+    {id:17,title:"Señorita",artist:"Shawn Mendes",album:"Señorita",duration:"3:10",genre:"latin",cover:"https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/46/fe/4a/46fe4a39-feb4-7b8b-97b9-0187d49a46bd/19UMGIM53914.rgb.jpg/300x300bb.jpg",audioSrc:"GUNIrPe707s"},
+    {id:18,title:"Sunflower",artist:"Post Malone",album:"Spider-Verse",duration:"2:38",genre:"hip-hop",cover:"https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/4b/30/2c/4b302cb6-7a14-5464-4e97-0577e9d0be49/18UMGIM82277.rgb.jpg/300x300bb.jpg",audioSrc:"ApXoWvfEYVU"},
+    {id:19,title:"Believer",artist:"Imagine Dragons",album:"Evolve",duration:"3:24",genre:"rock",cover:"https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/11/7a/b8/117ab805-6811-8929-18b9-0fad7baf0c25/17UMGIM98210.rgb.jpg/300x300bb.jpg",audioSrc:"IhP3J0j9JmY"},
+    {id:20,title:"Perfect",artist:"Ed Sheeran",album:"÷",duration:"4:23",genre:"ballad",cover:"https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/15/e6/e8/15e6e8a4-4190-6a8b-86c3-ab4a51b88288/190295851286.jpg/300x300bb.jpg",audioSrc:"iKzRIweSBLA"},
+    {id:21,title:"Dynamite",artist:"BTS",album:"Dynamite",duration:"3:19",genre:"k-pop",cover:"https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/03/8d/0e/038d0e52-e96d-f386-b8eb-9f77fa013543/195497146918_Cover.jpg/300x300bb.jpg",audioSrc:"OiMWFojB9Ok"},
+    {id:22,title:"Drivers License",artist:"Olivia Rodrigo",album:"SOUR",duration:"4:02",genre:"pop",cover:"https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/02/ed/8c/02ed8cab-c089-2fdd-7ce6-ab334a9a4e19/21UMGIM26093.rgb.jpg/300x300bb.jpg",audioSrc:"tNJhkrpLGT8"},
+    {id:23,title:"Watermelon Sugar",artist:"Harry Styles",album:"Fine Line",duration:"2:54",genre:"pop",cover:"https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/2b/c4/c9/2bc4c9d4-3bc6-ab13-3f71-df0b89b173de/886448022213.jpg/300x300bb.jpg",audioSrc:"7-x3uD5z1bQ"},
+    {id:24,title:"Peaches",artist:"Justin Bieber",album:"Justice",duration:"3:18",genre:"pop",cover:"https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/e0/92/da/e092da2d-9f6d-11dc-7843-2021e95a2b61/21UMGIM17518.rgb.jpg/300x300bb.jpg",audioSrc:"AwYQGtwoF68"},
+    {id:25,title:"Heat Waves",artist:"Glass Animals",album:"Dreamland",duration:"3:58",genre:"indie",cover:"https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/da/8b/77/da8b7731-6f4f-eacf-5e74-8b23389eefa1/20UMGIM03371.rgb.jpg/300x300bb.jpg",audioSrc:"pzeefqfSMjY"},
+    {id:26,title:"Montero",artist:"Lil Nas X",album:"MONTERO",duration:"2:17",genre:"hip-hop",cover:"https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/8d/ef/37/8def37cf-f641-1bba-f312-61a9b8d19fbf/886449068029.jpg/300x300bb.jpg",audioSrc:"NIlz3g3DgCU"},
+    {id:27,title:"Stay",artist:"The Kid LAROI",album:"F*CK LOVE 3",duration:"2:21",genre:"pop",cover:"https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/89/59/6a/89596ab9-fa3c-8d08-4d95-a6450fa2013c/886449400515.jpg/300x300bb.jpg",audioSrc:"rkYlZnIbe2E"},
+    {id:28,title:"As It Was",artist:"Harry Styles",album:"Harry's House",duration:"2:47",genre:"pop",cover:"https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/2a/19/fb/2a19fb85-2f70-9e44-f2a9-82abe679b88e/886449990061.jpg/300x300bb.jpg",audioSrc:"V1Z586zoeeE"},
+    {id:29,title:"Anti-Hero",artist:"Taylor Swift",album:"Midnights",duration:"3:20",genre:"pop",cover:"https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/3d/01/f2/3d01f2e5-5a08-835f-3d30-d031720b2b80/22UM1IM07364.rgb.jpg/300x300bb.jpg",audioSrc:"XqN2qFvY64U"},
+    {id:30,title:"Flowers",artist:"Miley Cyrus",album:"Endless Summer",duration:"3:20",genre:"pop",cover:"https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/8c/67/ff/8c67ff91-31c3-3fef-1884-ce3ec89f3af4/196589946874.jpg/300x300bb.jpg",audioSrc:"SWpAYbgHmTo"},
+
+    {id:32,title:"Bonita (Remix 2)",artist:"Jeeiph x Kevin Roldán",album:"Bonita Remix 2",duration:"3:09",genre:"latin",cover:"https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/91/91/2c/91912c9a-4c2a-9e1e-2c2c-c2c2c2c2c2c2/source/300x300bb.jpg",audioSrc:"mXTkqCHrz9k"},
+  ],
+
+  artists: [
+    {id:1,name:"The Weeknd",img:"https://picsum.photos/seed/a1/300",followers:"85M",genre:"R&B/Pop"},
+    {id:2,name:"Dua Lipa",img:"https://picsum.photos/seed/a2/300",followers:"72M",genre:"Pop/Dance"},
+    {id:3,name:"Ed Sheeran",img:"https://picsum.photos/seed/a3/300",followers:"92M",genre:"Pop"},
+    {id:4,name:"Billie Eilish",img:"https://picsum.photos/seed/a4/300",followers:"68M",genre:"Alt/Pop"},
+    {id:5,name:"Bad Bunny",img:"https://picsum.photos/seed/a5/300",followers:"60M",genre:"Reggaetón"},
+    {id:6,name:"Taylor Swift",img:"https://picsum.photos/seed/a6/300",followers:"95M",genre:"Pop"},
+    {id:7,name:"Drake",img:"https://picsum.photos/seed/a7/300",followers:"78M",genre:"Hip-Hop"},
+    {id:8,name:"Adele",img:"https://picsum.photos/seed/a8/300",followers:"55M",genre:"Pop/Soul"},
+    {id:9,name:"BTS",img:"https://picsum.photos/seed/a9/300",followers:"70M",genre:"K-Pop"},
+    {id:10,name:"Harry Styles",img:"https://picsum.photos/seed/a10/300",followers:"48M",genre:"Pop/Rock"},
+  ],
+
+  playlists: [
+    {id:"daily-mix",name:"Mix Diario 1",desc:"The Weeknd, Dua Lipa, Ed Sheeran y más",cover:"https://picsum.photos/seed/p1/300",songs:[1,4,5,3,9,12]},
+    {id:"chill-vibes",name:"Chill Vibes",desc:"Relájate con lo mejor",cover:"https://picsum.photos/seed/p2/300",songs:[10,20,25,23,28]},
+    {id:"workout",name:"Workout Energy",desc:"Máxima energía para entrenar",cover:"https://picsum.photos/seed/p3/300",songs:[7,8,13,15,19,26]},
+    {id:"top-global",name:"Top 50 Global",desc:"Las más escuchadas del mundo",cover:"https://picsum.photos/seed/p4/300",songs:[1,3,6,11,21,29,30]},
+    {id:"latin-fire",name:"Latin Fire 🔥",desc:"Lo mejor del latin pop y reggaetón",cover:"https://picsum.photos/seed/p5/300",songs:[11,14,17,5]},
+    {id:"rock-classics",name:"Rock Clásicos",desc:"Los himnos del rock de todos los tiempos",cover:"https://picsum.photos/seed/p6/300",songs:[2,13,15,19]},
+    {id:"pop-hits",name:"Pop Hits 2024",desc:"Los éxitos más grandes del momento",cover:"https://picsum.photos/seed/p7/300",songs:[22,27,28,29,30,24]},
+    {id:"indie-mood",name:"Indie Mood",desc:"Descubre sonidos alternativos",cover:"https://picsum.photos/seed/p8/300",songs:[25,23,16]},
+  ],
+
+  genres: [
+    {name:"Pop",color:"#8b5cf6",icon:"fa-music"},
+    {name:"Hip-Hop",color:"#ef4444",icon:"fa-microphone"},
+    {name:"Rock",color:"#f97316",icon:"fa-guitar"},
+    {name:"Latin",color:"#22c55e",icon:"fa-fire"},
+    {name:"R&B",color:"#ec4899",icon:"fa-heart"},
+    {name:"Electrónica",color:"#06b6d4",icon:"fa-bolt"},
+    {name:"Indie",color:"#a78bfa",icon:"fa-leaf"},
+    {name:"K-Pop",color:"#f43f5e",icon:"fa-star"},
+    {name:"Reggaetón",color:"#eab308",icon:"fa-drum"},
+    {name:"Jazz",color:"#14b8a6",icon:"fa-saxophone"},
+    {name:"Clásica",color:"#6366f1",icon:"fa-violin"},
+    {name:"Metal",color:"#64748b",icon:"fa-skull"},
+  ],
+
+  moods: [
+    {name:"Feliz",emoji:"😊",color:"#22c55e"},
+    {name:"Energético",emoji:"⚡",color:"#f97316"},
+    {name:"Relajado",emoji:"😌",color:"#06b6d4"},
+    {name:"Melancólico",emoji:"🌧️",color:"#6366f1"},
+    {name:"Romántico",emoji:"💕",color:"#ec4899"},
+    {name:"Motivado",emoji:"🔥",color:"#ef4444"},
+    {name:"Nostálgico",emoji:"🌅",color:"#eab308"},
+    {name:"Fiesta",emoji:"🎉",color:"#8b5cf6"},
+  ],
+
+  premiumPlans: [
+    {name:"Individual",price:"$5.99",period:"/mes",features:["Sin anuncios","Descarga offline","Audio HD","Cancela cuando quieras"]},
+    {name:"Duo",price:"$7.99",period:"/mes",popular:true,features:["2 cuentas premium","Sin anuncios","Descarga offline","Audio HD","Playlist Duo Mix"]},
+    {name:"Familiar",price:"$9.99",period:"/mes",features:["Hasta 6 cuentas","Control parental","Sin anuncios","Descarga offline","Audio HD"]},
+  ],
+
+  notifications: [
+    {icon:"fa-compact-disc",title:"Nuevo Álbum",text:"The Weeknd lanzó 'Dawn FM'",time:"Hace 2h"},
+    {icon:"fa-fire",title:"Tendencia",text:"'Flowers' es #1 en Top 50 Global",time:"Hace 5h"},
+    {icon:"fa-crown",title:"Oferta Premium",text:"50% de descuento en tu primer mes",time:"Hace 1d"},
+  ],
+};
+
+// Mood → song mapping for AI recommendations
+const MOOD_SONGS = {
+  "Feliz": [3,8,9,16,21,24,27],
+  "Energético": [7,8,13,15,19,26],
+  "Relajado": [10,20,23,25,28],
+  "Melancólico": [10,12,22,25],
+  "Romántico": [11,14,17,20],
+  "Motivado": [1,7,13,19,26],
+  "Nostálgico": [2,12,16,20],
+  "Fiesta": [4,6,8,9,11,21,30],
+};

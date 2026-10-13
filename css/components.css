@@ -1,0 +1,128 @@
+/* Additional Component Styles */
+
+/* Animated playing bars */
+.playing-bars{display:flex;align-items:flex-end;gap:2px;height:16px}
+.playing-bars span{width:3px;background:var(--accent);border-radius:1px;animation:bars 1.2s ease-in-out infinite}
+.playing-bars span:nth-child(1){animation-delay:0s;height:60%}
+.playing-bars span:nth-child(2){animation-delay:.2s;height:100%}
+.playing-bars span:nth-child(3){animation-delay:.4s;height:40%}
+.playing-bars span:nth-child(4){animation-delay:.6s;height:80%}
+@keyframes bars{0%,100%{height:40%}50%{height:100%}}
+
+/* Loading skeleton */
+.skeleton{background:linear-gradient(90deg,var(--bg-tertiary) 25%,var(--bg-hover) 50%,var(--bg-tertiary) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:var(--radius-sm)}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+/* Context menu */
+.context-menu{position:fixed;background:var(--bg-tertiary);border:1px solid var(--glass-border);border-radius:var(--radius-sm);padding:6px;z-index:300;min-width:200px;max-width:280px;box-shadow:var(--shadow);display:none}
+.context-menu.show{display:block}
+.context-item{display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:6px;font-size:.85rem;transition:var(--transition)}
+.context-item:hover{background:var(--bg-hover)}
+.context-item i{width:16px;color:var(--text-muted)}
+.context-divider{height:1px;background:var(--glass-border);margin:4px 0}
+
+/* Equalizer effect */
+.eq-container{display:flex;align-items:center;justify-content:center;gap:3px;height:32px}
+.eq-bar{width:4px;border-radius:2px;background:var(--gradient);animation:eq 1s ease-in-out infinite}
+.eq-bar:nth-child(1){animation-delay:0s}
+.eq-bar:nth-child(2){animation-delay:.15s}
+.eq-bar:nth-child(3){animation-delay:.3s}
+.eq-bar:nth-child(4){animation-delay:.45s}
+.eq-bar:nth-child(5){animation-delay:.6s}
+@keyframes eq{0%,100%{height:8px}50%{height:28px}}
+
+/* Lyrics overlay */
+.lyrics-panel{position:fixed;right:-400px;top:0;bottom:var(--player-h);width:380px;max-width:90vw;background:var(--bg-secondary);border-left:1px solid var(--glass-border);z-index:150;transition:var(--transition);overflow-y:auto;padding:32px 24px}
+.lyrics-panel.open{right:0}
+.lyrics-line{font-size:1.1rem;color:var(--text-muted);padding:8px 0;transition:var(--transition);line-height:1.6}
+.lyrics-line.active{color:var(--text-primary);font-size:1.3rem;font-weight:700}
+
+/* Lyrics modal */
+.lyrics-modal{max-width:560px;width:90%;max-height:80vh;display:flex;flex-direction:column}
+.lyrics-modal h2{margin-bottom:2px;padding-right:32px}
+.lyrics-artist{color:var(--text-muted);font-size:.9rem;margin-bottom:16px}
+.lyrics-body{flex:1;overflow-y:auto;padding-right:8px;white-space:pre-wrap;line-height:1.9;font-size:.95rem;color:var(--text-secondary)}
+.lyrics-body .lyrics-loading{color:var(--text-muted);text-align:center;padding:40px 0}
+.lyrics-body .lyrics-none{color:var(--text-muted);text-align:center;padding:40px 0;font-style:italic}
+
+/* Floating action button */
+.fab{position:fixed;bottom:calc(var(--player-h) + 24px);right:24px;width:56px;height:56px;background:var(--gradient);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.3rem;box-shadow:0 4px 20px var(--accent-glow);transition:var(--transition);z-index:50}
+.fab:hover{transform:scale(1.1) rotate(90deg)}
+
+/* Empty state */
+.empty-state{text-align:center;padding:60px 20px;color:var(--text-muted)}
+.empty-state i{font-size:4rem;margin-bottom:16px;color:var(--bg-hover)}
+.empty-state h3{font-size:1.2rem;color:var(--text-secondary);margin-bottom:8px}
+
+/* Tooltip */
+[data-tooltip]{position:relative}
+[data-tooltip]:hover::after{content:attr(data-tooltip);position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:var(--bg-tertiary);padding:6px 12px;border-radius:6px;font-size:.75rem;white-space:nowrap;z-index:400;box-shadow:var(--shadow)}
+
+/* Badge */
+.badge{display:inline-flex;align-items:center;gap:4px;padding:2px 10px;border-radius:var(--radius-full);font-size:.7rem;font-weight:700;text-transform:uppercase}
+.badge-premium{background:linear-gradient(135deg,#f97316,#eab308);color:#000}
+.badge-new{background:var(--accent);color:white}
+.badge-live{background:var(--red);color:white;animation:pulse 2s infinite}
+
+/* ═══════════════════════════════════════════════
+   COMPONENTS RESPONSIVE
+   ═══════════════════════════════════════════════ */
+
+/* ── Tablet: 768px – 900px ── */
+@media(max-width:900px){
+  .lyrics-panel{width:320px}
+  .lyrics-modal{max-width:90%}
+  .lyrics-line{font-size:1rem}
+  .lyrics-line.active{font-size:1.15rem}
+  .fab{width:48px;height:48px;font-size:1.1rem;bottom:calc(var(--player-h) + 80px);right:16px}
+  .context-menu{min-width:180px}
+}
+
+/* ── Mobile: 600px – 768px ── */
+@media(max-width:768px){
+  .lyrics-panel{width:100%;max-width:100vw}
+  .lyrics-panel{padding:24px 16px}
+  .lyrics-line{font-size:.95rem;padding:6px 0}
+  .lyrics-line.active{font-size:1.1rem}
+  .lyrics-modal{max-height:75vh;width:94%}
+  .lyrics-body{font-size:.9rem;line-height:1.7}
+  .fab{width:44px;height:44px;font-size:1rem;bottom:calc(var(--player-h) + 70px);right:12px}
+  .context-menu{min-width:160px;max-width:calc(100vw - 24px)}
+  .context-item{padding:8px 12px;font-size:.8rem}
+  .playing-bars{height:14px}
+  .playing-bars span{width:2.5px}
+  .eq-container{height:24px}
+  .eq-bar{width:3px}
+}
+
+/* ── Phone: 360px – 480px ── */
+@media(max-width:480px){
+  .lyrics-panel{padding:16px 12px}
+  .lyrics-line{font-size:.85rem;padding:5px 0}
+  .lyrics-line.active{font-size:1rem}
+  .lyrics-modal{max-height:70vh;padding:16px}
+  .lyrics-modal h2{font-size:1.1rem}
+  .lyrics-artist{font-size:.8rem}
+  .lyrics-body{font-size:.85rem;line-height:1.6}
+  .fab{width:40px;height:40px;font-size:.9rem;bottom:calc(var(--player-h) + 60px);right:10px}
+  .empty-state{padding:40px 16px}
+  .empty-state i{font-size:3rem}
+  .empty-state h3{font-size:1rem}
+  .badge{font-size:.6rem;padding:2px 8px}
+  [data-tooltip]:hover::after{display:none}
+}
+
+/* ── Very small phone: max 360px ── */
+@media(max-width:360px){
+  .lyrics-modal{max-height:65vh;padding:12px}
+  .lyrics-line{font-size:.8rem}
+  .lyrics-line.active{font-size:.95rem}
+  .fab{width:36px;height:36px;font-size:.8rem}
+}
+
+/* ── Touch device: hide tooltips, bigger targets ── */
+@media(hover:none) and (pointer:coarse){
+  [data-tooltip]:hover::after{display:none}
+  .context-item{padding:12px 14px}
+  .fab{width:52px;height:52px}
+}

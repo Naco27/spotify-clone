@@ -1,0 +1,21 @@
+{
+  "name": "SoundWave Music",
+  "short_name": "SoundWave",
+  "description": "Tu música, tus reglas. Streaming de alta calidad con IA.",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#0a0a0f",
+  "theme_color": "#8b5cf6",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/3659/3659898.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/3659/3659898.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

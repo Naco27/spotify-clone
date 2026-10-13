@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SoundWave Admin — Panel de Administración</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        :root{--bg:#0a0a0f;--bg2:#121218;--bg3:#1a1a24;--text:#f0f0f5;--muted:#6a6a80;--accent:#8b5cf6;--green:#22c55e;--red:#ef4444;--orange:#f97316;--border:rgba(255,255,255,.08);--radius:12px}
+        body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+        .admin-layout{display:grid;grid-template-columns:240px 1fr;min-height:100vh}
+        .admin-sidebar{background:var(--bg2);padding:24px 16px;border-right:1px solid var(--border)}
+        .admin-logo{display:flex;align-items:center;gap:10px;margin-bottom:32px;font-weight:800;font-size:1.1rem}
+        .admin-logo i{font-size:1.4rem;color:var(--accent)}
+        .admin-nav a{display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:8px;color:var(--muted);font-size:.9rem;font-weight:500;transition:all .2s;margin-bottom:4px}
+        .admin-nav a:hover,.admin-nav a.active{background:rgba(139,92,246,.15);color:var(--accent)}
+        .admin-nav a i{width:20px;text-align:center}
+        .admin-main{padding:32px;overflow-y:auto}
+        .admin-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:32px}
+        .admin-header h1{font-size:1.8rem;font-weight:800}
+        .stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-bottom:32px}
+        .stat-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:24px;position:relative;overflow:hidden}
+        .stat-card::after{content:'';position:absolute;top:0;right:0;width:80px;height:80px;border-radius:50%;opacity:.1}
+        .stat-card.purple::after{background:var(--accent)}.stat-card.green::after{background:var(--green)}.stat-card.orange::after{background:var(--orange)}.stat-card.red::after{background:var(--red)}
+        .stat-label{font-size:.8rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px}
+        .stat-value{font-size:2rem;font-weight:800}
+        .stat-change{font-size:.8rem;margin-top:4px;display:flex;align-items:center;gap:4px}
+        .stat-change.up{color:var(--green)}.stat-change.down{color:var(--red)}
+        .admin-section{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:24px;margin-bottom:24px}
+        .admin-section h2{font-size:1.2rem;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+        .admin-section h2 i{color:var(--accent)}
+        table{width:100%;border-collapse:collapse}
+        th,td{padding:12px 16px;text-align:left;border-bottom:1px solid var(--border);font-size:.9rem}
+        th{font-size:.75rem;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-weight:600}
+        tr:hover{background:rgba(255,255,255,.02)}
+        .badge{display:inline-block;padding:2px 10px;border-radius:20px;font-size:.7rem;font-weight:700}
+        .badge-active{background:rgba(34,197,94,.15);color:var(--green)}
+        .badge-premium{background:rgba(249,115,22,.15);color:var(--orange)}
+        .btn-sm{padding:6px 14px;border-radius:6px;font-size:.8rem;font-weight:600;border:1px solid var(--border);cursor:pointer;transition:all .2s;background:transparent;color:var(--text)}
+        .btn-sm:hover{background:var(--accent);border-color:var(--accent)}
+        .btn-danger{color:var(--red);border-color:var(--red)}
+        .btn-danger:hover{background:var(--red)}
+        .chart-bar{display:flex;align-items:flex-end;gap:8px;height:160px;padding-top:16px}
+        .bar{flex:1;background:linear-gradient(to top,var(--accent),rgba(139,92,246,.3));border-radius:4px 4px 0 0;position:relative;transition:all .3s;min-width:20px}
+        .bar:hover{opacity:.8}
+        .bar-label{position:absolute;bottom:-24px;left:50%;transform:translateX(-50%);font-size:.65rem;color:var(--muted);white-space:nowrap}
+        .bar-value{position:absolute;top:-20px;left:50%;transform:translateX(-50%);font-size:.7rem;font-weight:600}
+        a{color:inherit;text-decoration:none}
+        .back-link{display:inline-flex;align-items:center;gap:8px;color:var(--muted);font-size:.9rem;margin-bottom:16px;transition:color .2s}
+        .back-link:hover{color:var(--accent)}
+        @media(max-width:1024px){.stat-grid{grid-template-columns:repeat(2,1fr)}.admin-main{padding:24px}}
+        @media(max-width:768px){
+            .admin-layout{grid-template-columns:1fr}
+            .admin-sidebar{display:none}
+            .admin-main{padding:16px}
+            .admin-header{flex-direction:column;align-items:flex-start;gap:8px}
+            .admin-header h1{font-size:1.4rem}
+            .stat-grid{grid-template-columns:repeat(2,1fr);gap:12px}
+            .stat-card{padding:16px}
+            .stat-value{font-size:1.5rem}
+            .admin-section{padding:16px}
+            .admin-section h2{font-size:1rem}
+            .admin-section table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch}
+            th,td{padding:10px 12px;font-size:.8rem;white-space:nowrap}
+            .chart-bar{height:120px;gap:4px}
+            .bar-label{font-size:.55rem}
+            .bar-value{font-size:.6rem}
+        }
+        @media(max-width:480px){
+            .stat-grid{grid-template-columns:1fr;gap:8px}
+            .stat-card{padding:12px}
+            .stat-value{font-size:1.3rem}
+            .stat-label{font-size:.7rem}
+            .stat-change{font-size:.7rem}
+            th,td{padding:8px;font-size:.75rem}
+            .btn-sm{padding:4px 10px;font-size:.7rem}
+            .badge{font-size:.6rem;padding:2px 8px}
+            .chart-bar{height:100px;gap:2px}
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-layout">
+        <aside class="admin-sidebar">
+            <div class="admin-logo"><i class="fas fa-shield-alt"></i> Admin Panel</div>
+            <nav class="admin-nav">
+                <a href="#" class="active" data-section="dashboard"><i class="fas fa-chart-pie"></i> Dashboard</a>
+                <a href="#" data-section="users"><i class="fas fa-users"></i> Usuarios</a>
+                <a href="#" data-section="music"><i class="fas fa-music"></i> Música</a>
+                <a href="#" data-section="analytics"><i class="fas fa-chart-line"></i> Analíticas</a>
+                <a href="#" data-section="settings"><i class="fas fa-cog"></i> Configuración</a>
+            </nav>
+            <div style="margin-top:auto;padding-top:24px">
+                <a href="../index.html" class="back-link"><i class="fas fa-arrow-left"></i> Volver a SoundWave</a>
+            </div>
+        </aside>
+        <main class="admin-main" id="admin-main">
+            <a href="../index.html" class="back-link"><i class="fas fa-arrow-left"></i> Volver a SoundWave</a>
+            <div class="admin-header">
+                <h1>Dashboard</h1>
+                <span style="color:var(--muted);font-size:.85rem">Último acceso: Hoy</span>
+            </div>
+            <div class="stat-grid">
+                <div class="stat-card purple">
+                    <div class="stat-label">Usuarios Totales</div>
+                    <div class="stat-value">24,582</div>
+                    <div class="stat-change up"><i class="fas fa-arrow-up"></i> +12.5% este mes</div>
+                </div>
+                <div class="stat-card green">
+                    <div class="stat-label">Premium Activos</div>
+                    <div class="stat-value">8,431</div>
+                    <div class="stat-change up"><i class="fas fa-arrow-up"></i> +8.2% este mes</div>
+                </div>
+                <div class="stat-card orange">
+                    <div class="stat-label">Canciones</div>
+                    <div class="stat-value">1.2M</div>
+                    <div class="stat-change up"><i class="fas fa-arrow-up"></i> +2,340 esta semana</div>
+                </div>
+                <div class="stat-card red">
+                    <div class="stat-label">Streams Hoy</div>
+                    <div class="stat-value">156K</div>
+                    <div class="stat-change down"><i class="fas fa-arrow-down"></i> -3.1% vs ayer</div>
+                </div>
+            </div>
+            <div class="admin-section">
+                <h2><i class="fas fa-chart-bar"></i> Streams por Día (Última Semana)</h2>
+                <div class="chart-bar" id="chart-streams"></div>
+            </div>
+            <div class="admin-section">
+                <h2><i class="fas fa-users"></i> Usuarios Recientes</h2>
+                <table>
+                    <thead><tr><th>Usuario</th><th>Email</th><th>Plan</th><th>Estado</th><th>Acciones</th></tr></thead>
+                    <tbody id="users-table"></tbody>
+                </table>
+            </div>
+            <div class="admin-section">
+                <h2><i class="fas fa-fire"></i> Top Canciones Hoy</h2>
+                <table>
+                    <thead><tr><th>#</th><th>Canción</th><th>Artista</th><th>Streams</th></tr></thead>
+                    <tbody id="top-songs-table"></tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+    <script>
+        // Chart
+        const days = ['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'];
+        const values = [142,158,135,168,156,189,156];
+        const max = Math.max(...values);
+        document.getElementById('chart-streams').innerHTML = values.map((v,i) =>
+            `<div class="bar" style="height:${(v/max)*100}%"><span class="bar-value">${v}K</span><span class="bar-label">${days[i]}</span></div>`
+        ).join('');
+
+        // Users
+        const users = [
+            {name:'María García',email:'maria@email.com',plan:'Premium',status:'Activo'},
+            {name:'Carlos López',email:'carlos@email.com',plan:'Free',status:'Activo'},
+            {name:'Ana Martínez',email:'ana@email.com',plan:'Premium',status:'Activo'},
+            {name:'Pedro Ruiz',email:'pedro@email.com',plan:'Duo',status:'Activo'},
+            {name:'Laura Sánchez',email:'laura@email.com',plan:'Free',status:'Activo'},
+        ];
+        document.getElementById('users-table').innerHTML = users.map(u => `<tr>
+            <td style="font-weight:600">${u.name}</td><td style="color:var(--muted)">${u.email}</td>
+            <td><span class="badge ${u.plan==='Free'?'badge-active':'badge-premium'}">${u.plan}</span></td>
+            <td><span class="badge badge-active">${u.status}</span></td>
+            <td><button class="btn-sm">Editar</button> <button class="btn-sm btn-danger">Ban</button></td>
+        </tr>`).join('');
+
+        // Top songs
+        const topSongs = [
+            {title:'Blinding Lights',artist:'The Weeknd',streams:'45.2K'},
+            {title:'Flowers',artist:'Miley Cyrus',streams:'38.7K'},
+            {title:'Anti-Hero',artist:'Taylor Swift',streams:'32.1K'},
+            {title:'As It Was',artist:'Harry Styles',streams:'28.9K'},
+            {title:'Shape of You',artist:'Ed Sheeran',streams:'25.3K'},
+        ];
+        document.getElementById('top-songs-table').innerHTML = topSongs.map((s,i) =>
+            `<tr><td style="font-weight:700;color:var(--accent)">${i+1}</td><td style="font-weight:600">${s.title}</td><td style="color:var(--muted)">${s.artist}</td><td>${s.streams}</td></tr>`
+        ).join('');
+    </script>
+</body>
+</html>
