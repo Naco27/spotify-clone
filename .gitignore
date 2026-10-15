@@ -7,3 +7,5 @@ track_cache.json
 node_modules/
 .vercel/
 .env
+err.txt
+out.txt

@@ -18,10 +18,14 @@
 <body>
     <!-- Sidebar Navigation -->
     <aside class="sidebar" id="sidebar">
-        <div class="sidebar-logo">
-            <div class="logo-icon"><i class="fas fa-wave-square"></i></div>
-            <span class="logo-text">SoundWave</span>
+        <div class="sidebar-profile">
+            <div class="sidebar-avatar">J</div>
+            <div class="sidebar-profile-info">
+                <span class="sidebar-username">Juan</span>
+                <span class="sidebar-profile-link">Ver perfil</span>
+            </div>
         </div>
+        <a href="#" class="sidebar-add-account"><i class="fas fa-plus-circle"></i> Agregar cuenta</a>
         <nav class="sidebar-nav">
             <a href="#" class="nav-item active" data-view="home" id="nav-home">
                 <i class="fas fa-home"></i><span>Inicio</span>
@@ -36,6 +40,25 @@
                 <i class="fas fa-brain"></i><span>IA Mix</span>
             </a>
         </nav>
+        <div class="sidebar-divider"></div>
+        <nav class="sidebar-nav">
+            <a href="#" class="nav-item"><i class="fas fa-chart-line"></i><span>Estadísticas de reproducción</span><span class="badge-new" style="margin-left:auto;font-size:.6rem">Nuevo</span></a>
+            <a href="#" class="nav-item" data-view="library"><i class="fas fa-history"></i><span>Recientes</span></a>
+            <a href="#" class="nav-item"><i class="fas fa-bullhorn"></i><span>Tus avisos</span></a>
+            <a href="#" class="nav-item"><i class="fas fa-cog"></i><span>Configuración y privacidad</span></a>
+        </nav>
+        <div class="sidebar-divider"></div>
+        <div class="sidebar-activity">
+            <div class="sidebar-activity-item">
+                <div class="sidebar-avatar small">J</div>
+                <span>Actividad</span>
+                <span class="sidebar-activity-status">Activar</span>
+            </div>
+            <div class="sidebar-activity-item">
+                <div class="sidebar-invite"><i class="fas fa-plus"></i></div>
+                <span>Invitar a amigos</span>
+            </div>
+        </div>
         <div class="sidebar-divider"></div>
         <div class="playlist-section">
             <div class="playlist-header">
@@ -319,6 +342,50 @@
 
     <!-- Toast Container -->
     <div class="toast-container" id="toast-container"></div>
+
+    <!-- Now Playing Fullscreen -->
+    <div class="now-playing-full" id="now-playing-full">
+        <div class="np-bg" id="np-bg"></div>
+        <div class="np-content">
+            <div class="np-header">
+                <button class="btn-icon np-close" id="np-close"><i class="fas fa-chevron-down"></i></button>
+                <span class="np-header-text">Reproduciendo desde Buscar</span>
+                <button class="btn-icon np-more"><i class="fas fa-ellipsis-h"></i></button>
+            </div>
+            <div class="np-cover" id="np-cover"></div>
+            <div class="np-info">
+                <div class="np-info-left">
+                    <p class="np-title" id="np-title">Sin reproducción</p>
+                    <p class="np-artist" id="np-artist">—</p>
+                </div>
+                <button class="btn-icon np-add" id="np-add"><i class="fas fa-plus-circle"></i></button>
+            </div>
+            <div class="np-progress">
+                <div class="np-progress-bar" id="np-progress-bar">
+                    <div class="np-progress-fill" id="np-progress-fill"></div>
+                </div>
+                <div class="np-times">
+                    <span id="np-time-current">0:00</span>
+                    <span id="np-time-total">0:00</span>
+                </div>
+            </div>
+            <div class="np-controls">
+                <button class="btn-icon np-btn" id="np-shuffle"><i class="fas fa-random"></i></button>
+                <button class="btn-icon np-btn" id="np-prev"><i class="fas fa-step-backward"></i></button>
+                <button class="btn-icon np-play" id="np-play"><i class="fas fa-play"></i></button>
+                <button class="btn-icon np-btn" id="np-next"><i class="fas fa-step-forward"></i></button>
+                <button class="btn-icon np-btn" id="np-repeat"><i class="fas fa-redo"></i></button>
+            </div>
+            <div class="np-bottom">
+                <button class="btn-icon np-btn-sm"><i class="fas fa-device-huge"></i></button>
+                <button class="btn-icon np-btn-sm" id="np-share"><i class="fas fa-share-alt"></i></button>
+                <button class="btn-icon np-btn-sm" id="np-lyrics-btn"><i class="fas fa-list-ul"></i></button>
+            </div>
+            <div class="np-lyrics-preview" id="np-lyrics-preview">
+                <p>Vista previa de la letra</p>
+            </div>
+        </div>
+    </div>
 
     <!-- YouTube Player Element (Hidden) -->
     <div id="youtube-player" style="position: absolute; top: -9999px; left: -9999px; width: 1px; height: 1px;"></div>

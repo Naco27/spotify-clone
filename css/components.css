@@ -32,8 +32,8 @@
 @keyframes eq{0%,100%{height:8px}50%{height:28px}}
 
 /* Lyrics overlay */
-.lyrics-panel{position:fixed;right:-400px;top:0;bottom:var(--player-h);width:380px;max-width:90vw;background:var(--bg-secondary);border-left:1px solid var(--glass-border);z-index:150;transition:var(--transition);overflow-y:auto;padding:32px 24px}
-.lyrics-panel.open{right:0}
+.lyrics-panel{position:fixed;right:-400px;top:0;bottom:var(--player-h);width:380px;max-width:90vw;background:var(--bg-secondary);border-left:1px solid var(--glass-border);z-index:150;transition:right .3s cubic-bezier(.4,0,.2,1);overflow-y:auto;padding:32px 24px;visibility:hidden}
+.lyrics-panel.open{right:0;visibility:visible}
 .lyrics-line{font-size:1.1rem;color:var(--text-muted);padding:8px 0;transition:var(--transition);line-height:1.6}
 .lyrics-line.active{color:var(--text-primary);font-size:1.3rem;font-weight:700}
 
@@ -80,7 +80,8 @@
 
 /* ── Mobile: 600px – 768px ── */
 @media(max-width:768px){
-  .lyrics-panel{width:100%;max-width:100vw}
+  .lyrics-panel{width:100%;max-width:100vw;right:-100%}
+  .lyrics-panel.open{right:0}
   .lyrics-panel{padding:24px 16px}
   .lyrics-line{font-size:.95rem;padding:6px 0}
   .lyrics-line.active{font-size:1.1rem}

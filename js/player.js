@@ -111,6 +111,38 @@ class SWPlayer {
       }
       this._updateVolume();
     };
+
+    // Fullscreen Now Playing
+    const npFull = $('now-playing-full');
+    const openNp = () => { if (this.queue[this.currentIndex]) npFull.classList.add('show'); };
+    const closeNp = () => npFull.classList.remove('show');
+    $('player-track-info').onclick = openNp;
+    $('np-close').onclick = closeNp;
+    $('np-play').onclick = () => this.togglePlay();
+    $('np-prev').onclick = () => this.prev();
+    $('np-next').onclick = () => this.next();
+    $('np-shuffle').onclick = () => { this.toggleShuffle(); $('np-shuffle').classList.toggle('active'); };
+    $('np-repeat').onclick = () => { this.toggleRepeat(); $('np-repeat').classList.toggle('active'); };
+
+    // NP progress bar
+    const npPb = $('np-progress-bar');
+    npPb.addEventListener('click', e => {
+      const pct = e.offsetX / npPb.offsetWidth;
+      const song = this.queue[this.currentIndex];
+      if (song && song.previewUrl && !song.audioSrc) {
+        if (this.audio && this.audio.duration) {
+          this.audio.currentTime = pct * this.audio.duration;
+          this._updateProgress();
+        }
+        return;
+      }
+      if (!this.ytReady || !this.ytPlayer) return;
+      const dur = this.ytPlayer.getDuration();
+      if (dur) {
+        this.ytPlayer.seekTo(pct * dur, true);
+        this._updateProgress();
+      }
+    });
   }
 
   loadQueue(songs, startIndex = 0) {
@@ -371,29 +403,52 @@ class SWPlayer {
     document.getElementById('player-artist').textContent = song.artist;
     const cover = document.getElementById('player-cover');
     const ytThumb = song.audioSrc ? `https://img.youtube.com/vi/${song.audioSrc}/mqdefault.jpg` : '';
-    cover.innerHTML = `<img src="${song.cover}" alt="${song.title}" onerror="this.onerror=null; this.src='${ytThumb}';">`;
+    const coverHtml = `<img src="${song.cover}" alt="${song.title}" onerror="this.onerror=null; this.src='${ytThumb}';">`;
+    cover.innerHTML = coverHtml;
+
+    // Fullscreen now-playing
+    const npTitle = document.getElementById('np-title');
+    const npArtist = document.getElementById('np-artist');
+    const npCover = document.getElementById('np-cover');
+    const npBg = document.getElementById('np-bg');
+    if (npTitle) npTitle.textContent = song.title;
+    if (npArtist) npArtist.textContent = song.artist;
+    if (npCover) npCover.innerHTML = coverHtml;
+    if (npBg && song.cover) npBg.style.backgroundImage = `url(${song.cover})`;
 
     document.getElementById('progress-fill').style.width = '0%';
     document.getElementById('time-current').textContent = '0:00';
     document.getElementById('time-total').textContent = song.duration;
+    const npTimeTotal = document.getElementById('np-time-total');
+    const npTimeCurrent = document.getElementById('np-time-current');
+    const npProgressFill = document.getElementById('np-progress-fill');
+    if (npTimeTotal) npTimeTotal.textContent = song.duration;
+    if (npTimeCurrent) npTimeCurrent.textContent = '0:00';
+    if (npProgressFill) npProgressFill.style.width = '0%';
     const btn = document.getElementById('player-like');
     btn.classList.toggle('liked', this.liked.has(song.id));
     btn.innerHTML = this.liked.has(song.id) ? '<i class="fas fa-heart"></i>' : '<i class="far fa-heart"></i>';
-    // Update document title
     document.title = `${song.title} • ${song.artist} — SoundWave`;
   }
 
   _updatePlayBtn() {
-    document.getElementById('btn-play').innerHTML = this.isPlaying ? '<i class="fas fa-pause"></i>' : '<i class="fas fa-play"></i>';
+    const icon = this.isPlaying ? '<i class="fas fa-pause"></i>' : '<i class="fas fa-play"></i>';
+    document.getElementById('btn-play').innerHTML = icon;
+    const npPlay = document.getElementById('np-play');
+    if (npPlay) npPlay.innerHTML = icon;
   }
 
   _updateProgress() {
     const song = this.queue[this.currentIndex];
+    const npFill = document.getElementById('np-progress-fill');
+    const npCur = document.getElementById('np-time-current');
     if (song && song.previewUrl && !song.audioSrc) {
       if (!this.audio.duration) return;
       const pct = (this.audio.currentTime / this.audio.duration) * 100;
       document.getElementById('progress-fill').style.width = pct + '%';
       document.getElementById('time-current').textContent = this._fmt(this.audio.currentTime);
+      if (npFill) npFill.style.width = pct + '%';
+      if (npCur) npCur.textContent = this._fmt(this.audio.currentTime);
       return;
     }
 
@@ -405,6 +460,8 @@ class SWPlayer {
     const pct = (currentTime / duration) * 100;
     document.getElementById('progress-fill').style.width = pct + '%';
     document.getElementById('time-current').textContent = this._fmt(currentTime);
+    if (npFill) npFill.style.width = pct + '%';
+    if (npCur) npCur.textContent = this._fmt(currentTime);
   }
 
   _updateVolume() {
