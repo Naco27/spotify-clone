@@ -1,4 +1,4 @@
-﻿// SoundWave - Main Application
+// SoundWave - Main Application
 document.addEventListener('DOMContentLoaded', () => {
   const player = new SWPlayer();
   const $ = id => document.getElementById(id);
@@ -419,13 +419,15 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
     quickSearchTimeout = setTimeout(async () => {
-      if (currentSearchQuery && normStr(currentSearchQuery) === qLower) return;
+      // Only skip if the FULL search (doSearch) has already processed this same query
+      // We use a separate flag to avoid blocking the popover
       try {
         const res = await fetch(`/api/search?q=${encodeURIComponent(q)}&limit=5`);
         if (!res.ok) return;
         const data = await res.json();
         const songs = (data.results || []).slice(0, 5);
-        if (!songs.length || (currentSearchQuery && normStr(currentSearchQuery) === qLower)) {
+        // Abort if user typed something different since we started fetching
+        if (!songs.length || normStr(input.value) !== qLower) {
           quickResults.classList.remove('show');
           return;
         }
@@ -490,12 +492,13 @@ document.addEventListener('DOMContentLoaded', () => {
   // ── MAIN SEARCH (Spotify-style) ──
   async function doSearch(q) {
     if (!q || !q.trim()) return;
+    const qNorm = normStr(q);   // NFD-normalized for consistent comparison
     const qLower = q.toLowerCase().trim();
     const activeChip = document.querySelector('.filter-chip.active');
     const filter = activeChip ? activeChip.dataset.filter : 'all';
     const resultsEl = $('search-results');
     if (!resultsEl) return;
-    currentSearchQuery = qLower;
+    currentSearchQuery = qNorm;  // always store normalized
     quickResults.classList.remove('show');
 
     // ── Helper functions ──
@@ -549,15 +552,16 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
       </div>`;
 
-      // Right: song list
-      html += `<div class="sr-right"><h3 class="sr-section-title">Canciones</h3>`;
+      // Right: song list (only shown when there are songs beyond the top result)
       if (rest.length) {
+        html += `<div class="sr-right"><h3 class="sr-section-title">Canciones</h3>`;
         html += rest.map((s, i) => songRow(s, i + 1, q)).join('');
         if (songs.length > 5) {
           html += `<button class="sr-show-more" id="sr-show-more">Ver todas las canciones (${songs.length}) <i class="fas fa-chevron-down"></i></button>`;
         }
+        html += '</div>';
       }
-      html += '</div></div>';
+      html += '</div>';
 
       if (songs.length > 5) {
         html += `<div class="sr-section" id="sr-all-songs" style="display:none">
@@ -572,11 +576,15 @@ document.addEventListener('DOMContentLoaded', () => {
       resultsEl.querySelectorAll('.song-row').forEach(r => {
         r.onclick = e => {
           e.stopPropagation();
-          const id = parseInt(r.dataset.songId);
-          if (!isNaN(id)) {
-            const idx = songs.findIndex(s => s.id === id);
-            player.loadQueue(songs, Math.max(0, idx));
+          const songId = r.dataset.songId;
+          // Compare as string to support both numeric (Deezer) and string IDs
+          let idx = songs.findIndex(s => String(s.id) === String(songId));
+          // Fallback: use the rendered position index
+          if (idx === -1) {
+            const dataIdx = parseInt(r.dataset.index);
+            if (!isNaN(dataIdx)) idx = dataIdx;
           }
+          if (idx >= 0) player.loadQueue(songs, idx);
         };
       });
 
@@ -696,7 +704,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // ── Step 2: Fetch from API (Deezer) ──
     try {
-      const cacheKey = qLower + '_' + filter;
+      const cacheKey = qNorm + '_' + filter;
       let apiSongs = searchCache.has(cacheKey) ? searchCache.get(cacheKey) : null;
 
       if (!apiSongs) {
@@ -705,7 +713,7 @@ document.addEventListener('DOMContentLoaded', () => {
                        : filter === 'albums'  ? '/api/search/albums'
                        : '/api/search';
         const res = await fetch(`${endpoint}?q=${encodeURIComponent(cleanQ)}`);
-        if (currentSearchQuery !== qLower) return; // user typed something else
+        if (currentSearchQuery !== qNorm) return; // user typed something else
         if (!res.ok) throw new Error('API error ' + res.status);
         const data = await res.json();
         if (data.error) {
@@ -716,7 +724,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (apiSongs.length) searchCache.set(cacheKey, apiSongs);
       }
 
-      if (currentSearchQuery !== qLower) return;
+      if (currentSearchQuery !== qNorm) return;
 
       // Filter-specific render
       if (filter === 'artists') { renderArtists(apiSongs); return; }
@@ -739,14 +747,24 @@ document.addEventListener('DOMContentLoaded', () => {
         Promise.all(toResolve.map(s =>
           fetch(`/api/resolve?title=${encodeURIComponent(s.title)}&artist=${encodeURIComponent(s.artist)}`)
             .then(r => r.json())
-            .then(d => { if (d.audioSrc) s.audioSrc = d.audioSrc; })
+            .then(d => {
+              if (d.audioSrc) {
+                s.audioSrc = d.audioSrc;
+                // Update the cache entry so next search has audio ready
+                const cached = searchCache.get(cacheKey);
+                if (cached) {
+                  const entry = cached.find(x => String(x.id) === String(s.id));
+                  if (entry) entry.audioSrc = d.audioSrc;
+                }
+              }
+            })
             .catch(() => {})
         ));
       }
 
     } catch (err) {
       console.warn('[Search] API not available:', err.message);
-      if (currentSearchQuery === qLower) {
+      if (currentSearchQuery === qNorm) {
         renderMessage('fa-wifi', 'Error de conexión', 'No se pudo conectar con el servicio de música. Revisa tu conexión.', true);
       }
     }
@@ -1000,6 +1018,54 @@ document.addEventListener('DOMContentLoaded', () => {
   renderPremium();
   renderNotifications();
   renderPlaylistSidebar();
+
+  // ─── MOBILE NAV EXTRAS ───
+  const btnPremiumNav = $('btn-premium-nav');
+  if (btnPremiumNav) {
+    btnPremiumNav.onclick = (e) => { e.preventDefault(); $('modal-premium').classList.add('show'); };
+  }
+  const btnCreateNav = $('btn-create-nav');
+  if (btnCreateNav) {
+    btnCreateNav.onclick = (e) => { e.preventDefault(); $('modal-create-playlist').classList.add('show'); };
+  }
+
+  // ─── HOME CATEGORY CHIPS ───
+  document.querySelectorAll('.home-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      document.querySelectorAll('.home-chip').forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      // Just visual for now – Música/Podcasts/Audiolibros show a toast
+      const cat = chip.dataset.cat;
+      if (cat !== 'all') {
+        showToast(`${chip.textContent} — Próximamente`);
+      }
+    });
+  });
+
+  // ─── MOBILE PLAYER CONNECT DEVICE / ADD ───
+  const btnConnect = $('btn-connect-device');
+  if (btnConnect) btnConnect.onclick = () => showToast('Conectar a un dispositivo — Próximamente');
+  const btnAddQueue = $('btn-add-queue');
+  if (btnAddQueue) {
+    btnAddQueue.onclick = () => {
+      if (player.currentSong) {
+        showToast(`Añadido a cola: ${player.currentSong.title}`);
+      }
+    };
+  }
+
+  // ─── MINI PROGRESS BAR SYNC ───
+  const miniProgress = $('player-mini-progress');
+  const miniFill = $('player-mini-fill');
+  if (miniProgress && miniFill) {
+    setInterval(() => {
+      try {
+        const fill = $('progress-fill');
+        if (fill) miniFill.style.width = fill.style.width;
+      } catch(e) {}
+    }, 1000);
+  }
+
   // ─── KEYBOARD SHORTCUTS ───
   document.addEventListener('keydown', e => {
     // Avoid shortcuts when typing in inputs

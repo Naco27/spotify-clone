@@ -86,8 +86,9 @@
     <nav class="mobile-nav" id="mobile-nav">
         <a href="#" class="mobile-nav-item active" data-view="home"><i class="fas fa-home"></i><span>Inicio</span></a>
         <a href="#" class="mobile-nav-item" data-view="search"><i class="fas fa-search"></i><span>Buscar</span></a>
-        <a href="#" class="mobile-nav-item" data-view="library"><i class="fas fa-book-open"></i><span>Biblioteca</span></a>
-        <a href="#" class="mobile-nav-item" data-view="ai"><i class="fas fa-brain"></i><span>IA Mix</span></a>
+        <a href="#" class="mobile-nav-item" data-view="library"><i class="fas fa-book-open"></i><span>Tu biblioteca</span></a>
+        <a href="#" class="mobile-nav-item" id="btn-premium-nav"><i class="fas fa-crown"></i><span>Premium</span></a>
+        <a href="#" class="mobile-nav-item" id="btn-create-nav"><i class="fas fa-plus"></i><span>Crear</span></a>
     </nav>
 
     <!-- Main Content Area -->
@@ -95,9 +96,13 @@
         <!-- Top Bar -->
         <header class="top-bar" id="top-bar">
             <div class="top-bar-left">
-                <button class="btn-icon mobile-menu-btn" id="btn-mobile-menu"><i class="fas fa-bars"></i></button>
-                <button class="btn-icon" id="btn-back"><i class="fas fa-chevron-left"></i></button>
-                <button class="btn-icon" id="btn-forward"><i class="fas fa-chevron-right"></i></button>
+                <!-- Mobile: user avatar button (like Spotify) -->
+                <button class="btn-icon mobile-menu-btn mobile-avatar-btn" id="btn-mobile-menu">
+                    <div class="mobile-user-avatar">J</div>
+                </button>
+                <!-- Desktop: nav arrows -->
+                <button class="btn-icon desktop-only" id="btn-back"><i class="fas fa-chevron-left"></i></button>
+                <button class="btn-icon desktop-only" id="btn-forward"><i class="fas fa-chevron-right"></i></button>
             </div>
             <div class="top-bar-right">
                 <button class="btn-icon" id="btn-notifications" title="Notificaciones"><i class="fas fa-bell"></i><span class="notif-badge">3</span></button>
@@ -115,6 +120,14 @@
 
             <!-- HOME VIEW -->
             <section class="view active" id="view-home">
+                <!-- Mobile Category Chips -->
+                <div class="home-category-chips" id="home-category-chips">
+                    <button class="home-chip active" data-cat="all">Todas</button>
+                    <button class="home-chip" data-cat="music">Música</button>
+                    <button class="home-chip" data-cat="podcasts">Podcasts</button>
+                    <button class="home-chip" data-cat="audiobooks">Audiolibros</button>
+                </div>
+
                 <!-- Hero Banner -->
                 <div class="hero-banner" id="hero-banner">
                     <div class="hero-gradient"></div>
@@ -247,6 +260,10 @@
 
     <!-- Player Bar -->
     <footer class="player-bar" id="player-bar">
+        <!-- Mini progress strip (mobile only) -->
+        <div class="player-mini-progress" id="player-mini-progress">
+            <div class="player-mini-fill" id="player-mini-fill"></div>
+        </div>
         <div class="player-track-info" id="player-track-info">
             <div class="player-cover" id="player-cover"></div>
             <div class="player-meta">
@@ -273,6 +290,10 @@
             </div>
         </div>
         <div class="player-extra">
+            <!-- Mobile: device connect + add buttons -->
+            <button class="btn-icon player-mobile-btn" id="btn-connect-device" title="Dispositivos"><i class="fas fa-tv"></i></button>
+            <button class="btn-icon player-mobile-btn" id="btn-add-queue" title="Agregar a cola"><i class="fas fa-plus-circle"></i></button>
+            <!-- Desktop only -->
             <button class="btn-icon" id="btn-queue" title="Cola"><i class="fas fa-list"></i></button>
             <button class="btn-icon" id="btn-lyrics" title="Letra"><i class="fas fa-microphone-alt"></i></button>
             <div class="volume-control">
@@ -393,14 +414,30 @@
     <!-- Audio Element (Fallback) -->
     <audio id="audio-player" preload="auto"></audio>
 
-    <script src="https://www.youtube.com/iframe_api"></script>
+    <!-- Global error handler for mobile debugging -->
+    <script>
+        window.onerror = function(msg, src, line, col, err) {
+            console.error('JS Error:', msg, 'at', src, line);
+            var d = document.createElement('div');
+            d.style.cssText = 'position:fixed;bottom:0;left:0;right:0;background:#e11;color:#fff;padding:12px;font-size:12px;z-index:9999;max-height:30vh;overflow:auto';
+            d.textContent = msg + ' @ ' + (src||'').split('/').pop() + ':' + line;
+            document.body.appendChild(d);
+            setTimeout(function(){ d.remove(); }, 8000);
+        };
+    </script>
+
+    <!-- YouTube API loaded async so it doesn't block rendering -->
+    <script src="https://www.youtube.com/iframe_api" async></script>
 
     <script src="js/data.js"></script>
     <script src="js/player.js"></script>
     <script src="js/app.js"></script>
     <script>
+        // Clear stale service workers to avoid cached broken versions
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('sw.js');
+            navigator.serviceWorker.getRegistrations().then(function(regs) {
+                regs.forEach(function(r) { r.unregister(); });
+            });
         }
     </script>
 </body>

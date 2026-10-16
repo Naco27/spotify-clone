@@ -123,7 +123,7 @@ def inject_known_tracks(raw_q, tracks):
 _YT_HEADERS = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'}
 _VID_RE = re.compile(r'"videoId":"([a-zA-Z0-9_-]{11})"')
 
-def yt_search_one(query, timeout=3.5):
+def yt_search_one(query, timeout=4.0):
     """Return first videoId found (no embeddability check — instant)."""
     url = f'https://www.youtube.com/results?search_query={urllib.parse.quote(query)}'
     try:
@@ -273,7 +273,7 @@ def deezer_search(q, kind='track', limit=10, retries=1):
            f'?q={urllib.parse.quote(q)}&limit={limit}&order=RANKING')
     req = urllib.request.Request(url, headers=_YT_HEADERS)
     try:
-        with urllib.request.urlopen(req, timeout=2.0) as r:
+        with urllib.request.urlopen(req, timeout=3.0) as r:
             data = json.loads(r.read().decode())
             items = data.get('data', []) if isinstance(data, dict) else []
             return items, None
@@ -292,7 +292,7 @@ def itunes_search(term, limit=10):
            f'&media=music&entity=song&limit={limit}')
     req = urllib.request.Request(url, headers=_YT_HEADERS)
     try:
-        with urllib.request.urlopen(req, timeout=2.0) as r:
+        with urllib.request.urlopen(req, timeout=2.5) as r:
             data = json.loads(r.read().decode())
     except urllib.error.HTTPError as e:
         return [], f'iTunes HTTP {e.code}'
